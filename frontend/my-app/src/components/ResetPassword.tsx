@@ -14,19 +14,29 @@ export default function ResetPassword() {
 
     useEffect(()=>{
         async function getInfo(){
-            const item=localStorage.getItem("token");
-            if (item===null){
-              navigate("/");
-            }
-            else{
+            // const item=localStorage.getItem("token");
+            // if (item===null){
+            //   navigate("/");
+            // }
+            // else{
+            //   const res=await axios.post("http://localhost:3000/api/verify-token", {item});
+            // //   console.log(res.data.username);
+            //   if (res.status!==200){
+            //     navigate("/");
+            //   }
+            //   else{
+            //     setData((prevData)=>({...prevData, username: res.data.username}));
+            //   }
+            // }
+            try{
+              const item=localStorage.getItem("token");
               const res=await axios.post("http://localhost:3000/api/verify-token", {item});
-            //   console.log(res.data.username);
-              if (res.status!==200){
-                navigate("/");
-              }
-              else{
-                setData((prevData)=>({...prevData, username: res.data.username}));
-              }
+              setData((prevData)=>({...prevData, username: res.data.username}));
+            }
+            catch(error:any){
+              const {data}=error.response;
+              toast.error(data.message);
+              navigate("/");
             }
           }
           getInfo();
@@ -46,25 +56,16 @@ export default function ResetPassword() {
         const formElement=event.currentTarget;
         const formData=new FormData(formElement);
         const currentPassword=formData.get("currentPassword");
-        //check is current password entered is valid
+        const entry=formData.get("entry");
+        const confirmEntry=formData.get("confirmEntry");
         try{
-          const passResponse=await axios.post("http://localhost:3000/api/check-oldpassword", {currentPassword, username:data.username});
-          if (passResponse.status===200){
-            const entry=formData.get("entry");
-            const confirmEntry=formData.get("confirmEntry");
-            if (entry!==confirmEntry){
-                toast.error("New passwords don't match");
-            }
-            else{
-                try{
-                  const res=await axios.post("http://localhost:3000/api/reset-password", {password: entry, username: data.username});
-                  toast.success(res.data.message);
-                }
-                catch(error:any){
-                  const {data}=error.response;
-                  toast.error(data.message);
-                }
-            }
+          if (currentPassword===""||entry===""||confirmEntry===""){
+            toast.error("One or more fields cannot be empty");
+          }
+          else{
+            const passResponse=await axios.post("http://localhost:3000/api/reset-password", {currentPassword, username:data.username, entry, confirmEntry});
+            toast.success(passResponse.data.message);
+            navigate("/user");
           }
         }
         catch(error:any){
@@ -81,19 +82,31 @@ export default function ResetPassword() {
         }
     }
   return (
-    <div>
-      <form onSubmit={handleSubmit} id="confirmForm">
-        <p>Enter current password</p>
-        <input type="password" name="currentPassword" value={data.currentPassword} onChange={handleChange} />
-        <p>Enter New Password</p>
-        <input type="password" name="entry" value={data.entry} onChange={handleChange} />
-        <p>Confirm New Password</p>
-        <input type="password" name="confirmEntry" value={data.confirmEntry} onChange={handleChange} />
+    <div className="w-1/2 border-2 border-slate-950 rounded-lg bg-slate-600 mx-auto">
+      <div className="flex flex-col justify-center items-center w-full">
+        <form onSubmit={handleSubmit} id="confirmForm" className="w-3/4">
+          <div className="py-2">
+            <p className="text-lg font-semibold">Enter current password</p>
+            <input type="password" name="currentPassword" value={data.currentPassword} onChange={handleChange} placeholder="Enter current password" className="w-3/4 rounded-lg px-2 py-2 font-semibold" />
+          </div>
+          <div className="py-2">
+            <p className="text-lg font-semibold">Enter New Password</p>
+            <input type="password" name="entry" value={data.entry} onChange={handleChange} placeholder="Enter new password" className="w-3/4 rounded-lg px-2 py-2 font-semibold" />
+          </div>
+          <div className="py-2">
+            <p className="text-lg font-semibold">Confirm New Password</p>
+            <input type="password" name="confirmEntry" value={data.confirmEntry} onChange={handleChange} placeholder="Confirm new password" className="w-3/4 rounded-lg px-2 py-2 font-semibold" />
+          </div>
+          <br />
+          <div className="flex justify-start space-x-6">
+            <button type="submit" className="px-2 py- rounded-lg text-slate-950 bg-gradient-to-r from-slate-200 to-blue-500 font-semibold">Save Changes</button>
+          </div>
+        </form>
+        <div className="w-3/4 flex justify-start py-4">
+          <button onClick={()=>navigate("/user")} className="px-2 py- rounded-lg text-slate-950 bg-gradient-to-r from-slate-200 to-blue-500 font-semibold">Go Back</button>
+        </div>
         <br />
-        <button type="submit">Save Changes</button>
-      </form>
-      <br />
-      <button onClick={()=>navigate("/user")}>Go Back</button>
+      </div>
     </div>
   )
 }

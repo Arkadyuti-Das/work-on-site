@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv"
 import bcrypt from "bcrypt"
 import { helperFunctionError, helperFunctionSuccess } from "../helper/responseHelper";
+import { error } from "console";
 
 dotenv.config();
 
@@ -119,41 +120,38 @@ export const forgotPassword=async(req:Request, res:Response)=>{
     // })
 }
 
-export const resetPassword=async(req:Request, res:Response)=>{
-    const {password, username}=req.body;
+export const resetPassword=async (req:Request, res:Response)=>{
+    const {currentPassword, username, entry, confirmEntry}=req.body;
     try{
-        const hashedPassword=await bcrypt.hash(password, saltRounds);
-        await prisma.user.update({
+        //validate existing password
+        const result=await prisma.user.findMany({
             where:{
-                username: username
-            },
-            data:{
-                password:hashedPassword
+                username
             }
         });
-        helperFunctionSuccess(res, 200, {message: "Password updated"});
-        // res.json({message: "Password updated"});
-    }
-    catch(error){
-        helperFunctionError(res, 401, {message: "Some error has occurred"});
-        // console.log("Some error has occurred");
-    }
-}
-
-export const checkOldPassword=async(req:Request, res:Response)=>{
-    const {currentPassword, username}=req.body;
-    const result=await prisma.user.findMany({
-        where:{
-            username
+        const comparePassword=await bcrypt.compare(currentPassword, result[0].password);
+        if(comparePassword){
+            if (entry===confirmEntry){
+                const hashedPassword=await bcrypt.hash(entry, saltRounds);
+                await prisma.user.update({
+                    where:{
+                        username: username
+                    },
+                    data:{
+                        password:hashedPassword
+                    }
+                });
+                helperFunctionSuccess(res, 200, {message: "Password updated"});
+            }
+            else{
+                throw new Error("Passwords don't match");
+            }
         }
-    });
-    const comparePassword=await bcrypt.compare(currentPassword, result[0].password);
-    if (comparePassword){
-        helperFunctionSuccess(res, 200, {message: "Type in your new password"});
-        // res.status(200).json({message: "Type in your new password"});
+        else{
+            throw new Error("Incorrect existing password");
+        }
     }
-    else{
-        helperFunctionError(res, 401, {message: "Existing password doesn't match"});
-        // res.status(401).json({message: "Password don't match"});
-    }  
+    catch(error:any){
+        helperFunctionError(res, 400, {message:error.message});
+    }
 }

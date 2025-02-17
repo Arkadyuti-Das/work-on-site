@@ -2,7 +2,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify";
 
-export default function Logout() {
+export default function Logout(props?:any) {
     const navigate=useNavigate();
     const handleLogout=async()=>{
         await axios.post("http://localhost:3000/api/logout", {});
@@ -13,7 +13,7 @@ export default function Logout() {
     }
   return (
     <div>
-      <button onClick={handleLogout}>Logout</button>
+      <button className={props.className} onClick={handleLogout}>Logout</button>
     </div>
   )
 }

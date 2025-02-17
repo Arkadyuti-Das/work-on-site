@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import Logout from "./Logout";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import UserProfile from "./UserProfile";
 
 export default function User() {
   const [loginName, setLoginName]=useState<string>("");
@@ -25,9 +25,9 @@ export default function User() {
   },[])
   return (
     <div>
-      <p>Welcome {loginName}</p>
-      <Link to={"/reset-password"}>Reset Password</Link>
-      <Logout/>
+      <div>
+        <UserProfile loggedIn={loginName}/>
+      </div>
     </div>
   )
 }
