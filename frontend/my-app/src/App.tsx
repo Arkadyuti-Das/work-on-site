@@ -6,6 +6,7 @@ import Signup from './components/Signup'
 import ForgotPassword from './components/ForgotPassword'
 import ResetPassword from './components/ResetPassword'
 import { ToastContainer } from 'react-toastify'
+import "./index.css"
 
 export default function App() {
   return (

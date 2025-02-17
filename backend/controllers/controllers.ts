@@ -92,17 +92,20 @@ export const verifyToken=(req:Request, res:Response)=>{
     const {item}=req.body;
     if (!item){
         // return helperFunctionSuccess(res, 200, {message: "Token is required", role: "invalid"})
-        res.json({message: "Token is required", role: "invalid"});
+        // res.json({message: "Token is required", role: "invalid"});
+        helperFunctionError(res, 401, {message: "You must login to continue", role: "Invalid"});
     }
     else{
         try{
             const secret=process.env.JWT_SECRET as string;
             const decoded=jwt.verify(item, secret) as {username: string, email: string, role: string};
-            console.log(decoded);
-            res.json({message: "ok", role: decoded.role, username: decoded.username});
+            // console.log(decoded);
+            helperFunctionSuccess(res, 200, {message: "ok", role: decoded.role, username: decoded.username});
+            // res.json({message: "ok", role: decoded.role, username: decoded.username});
         }
         catch(error){
-            res.json({message: "Invalid token", role: "invalid"});
+            helperFunctionError(res, 401, {message: "Invalid token", role: "Invalid"});
+            // res.json({message: "Invalid token", role: "invalid"});
         }
     }
 }

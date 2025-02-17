@@ -31,11 +31,9 @@ export default function Login() {
           localStorage.setItem("token", response.data.token);
           // console.log(response.data.data);
           if (response.data.role==="ADMIN"){
-            toast.success("Welcome Admin");
             navigate("/admin");
           }
           else if (response.data.role==="USER"){
-            toast.success("Welcome User");
             navigate("/user");
           }
           else{
@@ -49,18 +47,24 @@ export default function Login() {
       }
     }
   return (
-    <div>
-    <p>Login</p>
-      <form onSubmit={handleSubmit} id="userform">
-        <p>Enter username</p>
-        <input type="text" placeholder='Enter Username' id="username" name="username" value={data.username} onChange={handleValueChange} />
-        <p>Enter Password</p>
-        <input type="password" name="userPassword" id="userPassword" value={data.userPassword} onChange={handleValueChange} />
+    <div className="w-1/2 border-2 border-slate-950 rounded-lg bg-slate-600 mx-auto">
+    <div className="flex flex-col justify-center items-center w-full">
+    <p className="text-2xl animate-pulse font-semibold py-4">Login</p>
+      <form onSubmit={handleSubmit} id="userform" className="w-3/4">
+        <div className="py-2">
+          <p className="text-lg font-semibold">Enter username</p>
+          <input type="text" placeholder='Enter Username' id="username" name="username" value={data.username} required autoComplete="off" onChange={handleValueChange} className="w-3/4 rounded-lg px-2 py-2 font-semibold"/>
+        </div>
+        <div className="py-2">
+          <p className="text-lg font-semibold">Enter Password</p>
+          <input type="password" name="userPassword" id="userPassword" value={data.userPassword} placeholder="Enter Password" required autoComplete="off" onChange={handleValueChange} className="w-3/4 rounded-lg px-2 py-2 font-semibold" />
+        </div>
         <br />
-        <button type='submit'>Submit</button>
+        <button type='submit' className="bg-emerald-700 px-2 py-1 rounded-lg font-semibold">Submit</button>
       </form>
-      <p>New User? <Link to={"/sign-up"}>Sign-up</Link></p>
-      <Link to={"/forgot-password"}>Forgot Password?</Link>
+      <p className="font-semibold">New User? <Link to={"/sign-up"} className="text-blue-800 hover:underline">Sign-up</Link></p>
+      <Link to={"/forgot-password"} className="text-slate-200 hover:underline font-semibold pb-4">Forgot Password?</Link>
+    </div>
     </div>
   )
 }

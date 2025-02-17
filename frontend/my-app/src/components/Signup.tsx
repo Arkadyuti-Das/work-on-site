@@ -47,19 +47,27 @@ export default function Signup() {
         }
     }
   return (
-    <div>
-    <p>Sign up</p>
-      <form onSubmit={handleSubmit} id="userform">
-        <p>Enter username</p>
-        <input type="text" placeholder='Enter Username' id="username" name="username" value={data.username} onChange={handleValueChange} />
-        <p>Enter Password</p>
-        <input type="password" name="userPassword" id="userPassword" value={data.userPassword} onChange={handleValueChange} />
-        <p>Enter Email</p>
-        <input type="email" name="useremail" id="useremail" value={data.useremail} onChange={handleValueChange} />
-        <br />
-        <button type='submit'>Submit</button>
-      </form>
-      <p>Existing User? <Link to={"/"}>Login</Link></p>
+    <div className="w-1/2 border-2 border-slate-950 rounded-lg bg-slate-600 mx-auto">
+        <div className="flex flex-col justify-center items-center w-full">
+            <p className="text-2xl animate-pulse font-semibold py-4">Sign up</p>
+            <form onSubmit={handleSubmit} id="userform" className="w-3/4">
+                <div className="py-2">
+                    <p className="text-lg font-semibold">Enter username</p>
+                    <input type="text" placeholder='Enter Username' id="username" name="username" value={data.username} onChange={handleValueChange} className="w-3/4 rounded-lg px-2 py-2 font-semibold" required autoComplete="off"/>
+                </div>
+                <div className="py-2">
+                    <p className="text-lg font-semibold">Enter Password</p>
+                    <input type="password" name="userPassword" id="userPassword" value={data.userPassword} placeholder="Enter Password" onChange={handleValueChange} className="w-3/4 rounded-lg px-2 py-2 font-semibold" required autoComplete="off"/>
+                </div>
+                <div className="py-2">
+                    <p className="text-lg font-semibold">Enter Email</p>
+                    <input type="email" name="useremail" id="useremail" placeholder="Enter Password" value={data.useremail} onChange={handleValueChange} className="w-3/4 rounded-lg px-2 py-2 font-semibold" required autoComplete="off"/>
+                </div>
+                <br />
+                <button type='submit' className="bg-emerald-700 px-2 py-1 rounded-lg font-semibold">Submit</button>
+            </form>
+        <p className="pb-4 font-semibold">Existing User? <Link to={"/"} className="text-violet-950 hover:underline">Login</Link></p>
+        </div>
     </div>
   )
 }
