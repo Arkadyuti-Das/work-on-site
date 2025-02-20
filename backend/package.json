@@ -16,7 +16,7 @@
   "type": "commonjs",
   "dependencies": {
     "@arcjet/node": "^1.0.0-beta.2",
-    "@prisma/client": "^6.3.1",
+    "@prisma/client": "^6.4.0",
     "@types/bcrypt": "^5.0.2",
     "@types/cookie-parser": "^1.4.8",
     "@types/cors": "^2.8.17",
@@ -29,12 +29,12 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
-    "prisma": "^6.3.1",
     "tsx": "^4.19.2",
     "typescript": "^5.7.3"
   },
   "devDependencies": {
     "nodemon": "^3.1.9",
+    "prisma": "^6.4.0",
     "ts-node": "^10.9.2"
   }
 }

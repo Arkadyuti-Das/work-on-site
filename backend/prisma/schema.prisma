@@ -27,3 +27,11 @@ enum Role {
   ADMIN
   USER
 }
+
+model Product {
+  id          String  @id @default(uuid())
+  name        String  @unique
+  description String
+  price       Int
+  image       String?
+}
